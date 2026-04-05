@@ -51,19 +51,19 @@ function displayIssues(issues){
             
             const lowerLabel = label.toLowerCase();
             if (lowerLabel === "bug") {
-                labelIcon = "./assets/BugDroid.png";
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Vector.png";
                 labelColor = "border-red-300 text-red-500";
             } else if (lowerLabel === "help wanted") {
-                labelIcon = "./assets/Vector.png";
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Lifebuoy.png";
                 labelColor = "border-yellow-400 text-yellow-600";
             } else if (lowerLabel === "enhancement") {
-                labelIcon = "./assets/Sparkle.png";
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Vector (1).png";
                 labelColor = "border-blue-300 text-blue-500";
             } else if (lowerLabel === "documentation") {
-                labelIcon = "./assets/Aperture.png";
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
                 labelColor = "border-green-300 text-green-500";
             } else if (lowerLabel === "good first issue") {
-                labelIcon = "./assets/Aperture.png";
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
                 labelColor = "border-purple-300 text-purple-500";
             }
 
