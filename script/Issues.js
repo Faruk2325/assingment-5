@@ -1,212 +1,35 @@
-const issuesContainer = document.getElementById("issuesContainer");
-const issueCount = document.getElementById("issueCount");
-const buttons = document.querySelectorAll("#btnContener button");
-const searchInput = document.getElementById("searchInput");
-const loader = document.getElementById("loader");
+ const query =
+    searchInput.value.toLowerCase();
 
-const modal = document.getElementById("my_modal_3");
-const modalContent = document.getElementById("modalContent");
+    const filtered =
+    allIssues.filter(issue =>
 
-let allIssues = [];
+        issue.title
+        .toLowerCase()
+        .includes(query)
 
-async function loadIssue(){
+        ||
 
-    loader.classList.remove("hidden");
+        issue.description
+        .toLowerCase()
+        .includes(query)
 
-    const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
-    const data = await res.json();
+    );
 
-    allIssues = data.data;
-
-    displayIssues(allIssues);
-
-    loader.classList.add("hidden");
-}
-
-function displayIssues(issues){
-
-    issuesContainer.innerHTML = "";
-    issueCount.innerText = issues.length + " Issues";
-
-    issues.forEach(issue =>{
-
-        const div = document.createElement("div");
-
-        const border =
-        issue.status === "open"
-        ? "border-green-500"
-        : "border-purple-500";
-
-        const icon =
-        issue.status === "open"
-        ? "B13-A5-Github-Issue-Tracker/assets/Open-Status.png"
-        : "B13-A5-Github-Issue-Tracker/assets/Closed-Status.png";
-
-        div.className =
-        `bg-white p-5 rounded-xl   shadow border-t-4 ${border} cursor-pointer`;
-
-        const labelsHTML = issue.labels.map(label => {
-            let labelIcon = "";
-            let labelColor = "border-gray-300 text-gray-500";
-            
-            const lowerLabel = label.toLowerCase();
-            if (lowerLabel === "bug") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Vector.png";
-                labelColor = "border-red-300 text-red-500";
-            } else if (lowerLabel === "help wanted") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Lifebuoy.png";
-                labelColor = "border-yellow-400 text-yellow-600";
-            } else if (lowerLabel === "enhancement") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Vector (1).png";
-                labelColor = "border-blue-300 text-blue-500";
-            } else if (lowerLabel === "documentation") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
-                labelColor = "border-green-300 text-green-500";
-            } else if (lowerLabel === "good first issue") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
-                labelColor = "border-purple-300 text-purple-500";
-            }
-
-            return `
-                <span class="border ${labelColor} px-3 py-1 rounded-full text-sm uppercase flex items-center gap-1">
-                    ${labelIcon ? `<img src="${labelIcon}" class="w-4 h-4">` : ""}
-                    ${label}
-                </span>
-            `;
-        }).join("");
-
-        div.innerHTML = `
-        <div class="flex justify-between items-start">
-            <div class="bg-green-100 p-2 rounded-full">
-                <img src="${icon}" class="w-5">
-            </div>
-
-            <div class="bg-red-100 text-red-500 px-4 py-1 rounded-full text-sm font-semibold uppercase">
-                ${issue.priority}
-            </div>
-        </div>
-
-        <h2 class="font-bold text-xl mt-4 text-gray-800">
-        ${issue.title}
-        </h2>
-
-        <p class="text-gray-500 mt-2 line-clamp-2">
-        ${issue.description}
-        </p>
-        <div class="flex gap-3 mt-4">
-            ${labelsHTML}
-        </div>
-
-        <div class="border-t mt-5 pt-3 text-gray-500 text-sm">
-            <p>#${issue.id} by ${issue.author}</p>
-           
-            <p>${new Date(issue.createdAt).toLocaleDateString()}</p>
-        </div>
-        `;
-
-        div.addEventListener("click", () =>{
-            openIssueModal(issue);
-        });
-
-        issuesContainer.appendChild(div);
-    });
-}
-function openIssueModal(issue){
-
-    modalContent.innerHTML = `
-     <div class="bg-white shadow-lg rounded-xl p-6 max-w-lg ">
-
-  
-    <h2 class="text-2xl font-bold mb-3">
-        ${issue.title}
-    </h2>
-
-    <div class="flex gap-4">
-
-        <h2 class="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold uppercase w-20">
-        ${issue.status}
-    </h2>
-    <span>•</span>
-    
-     <p>Opened by ${issue.author}</p>
-     <span> • </span>
-    <p>${new Date(issue.createdAt).toLocaleDateString()}</p>
-    </div>
-    
-<br>
-
-
-        <div class="flex flex-wrap gap-2 mb-4">
-
-        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
-            Priority : ${issue.priority}
-        </span>
-
-        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-            Assignee : ${issue.assignee}
-        </span>
-
-
-
-    </div>
-
-  
-    <p class="text-gray-600 mb-4 line-clamp-2">
-        ${issue.description}
-    </p>
-
-  
-
-
-    <!-- Info -->
-    <div class="flex justify-between items-center text-sm text-gray-500 border-t pt-3 space-y-1">
-    <div>
-    <p>Assignee:</p>
-        <p><b>Author :</b> ${issue.author}</p>
-        </div>
-
-        <div>
-        <p>Priority:</p>
-        <div class="bg-red-100 text-red-500 px-4 py-1 rounded-full text-sm font-semibold uppercase">
-                ${issue.priority}
-        </div>
-    </div>
-
-    
-
-</div>
-    `;
-
-    modal.showModal();
-}
-
-buttons.forEach(button =>{
-
-    button.addEventListener("click", () =>{
-
-        buttons.forEach(btn =>
-        btn.classList.remove("btn-primary"));
-
-        button.classList.add("btn-primary");
-
-        const status = button.dataset.status;
-
-        if(status === "all"){
-            displayIssues(allIssues);
-        }
-        else{
-
-            const filtered =
-            allIssues.filter(issue =>
-            issue.status === status);
-
-            displayIssues(filtered);
-        }
-
-    });
+    displayIssues(filtered);
 
 });
 
-searchInput.addEventListener("input", () =>{
+window.addEventListener("load", () =>{
 
-   
+    loader.classList.remove("hidden");
+
+    setTimeout(() =>{
+
+        loader.classList.add("hidden");
+
+    },500);
+
+});
+
+loadIssue();
