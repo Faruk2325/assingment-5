@@ -39,8 +39,8 @@ function displayIssues(issues){
 
         const icon =
         issue.status === "open"
-        ? "./assets/Open-Status.png"
-        : "/assets/Closed- Status .png";
+        ? "B13-A5-Github-Issue-Tracker/assets/Open-Status.png"
+        : "B13-A5-Github-Issue-Tracker/assets/Closed- Status .png";
 
         div.className =
         `bg-white p-5 rounded-xl   shadow border-t-4 ${border} cursor-pointer`;
@@ -62,9 +62,10 @@ function displayIssues(issues){
             } else if (lowerLabel === "documentation") {
                 labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
                 labelColor = "border-green-300 text-green-500";
-            } else if (lowerLabel === "good first issue") {
-                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Aperture.png";
-                labelColor = "border-purple-300 text-purple-500";
+                 } else if (lowerLabel === "good first issue") {
+                labelIcon = "B13-A5-Github-Issue-Tracker/assets/Lifebuoy.png";
+                labelColor = "border-yellow-400 text-yellow-600";
+                label = "help wanted";
             }
 
             return `
